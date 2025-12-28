@@ -1,26 +1,142 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8" />
-  <title>Swaroop Surya – Resume</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-    }
-    a {
-      font-size: 18px;
-    }
-  </style>
+  <title>Resume</title>
+  <link rel="stylesheet" href="resume.css" />
 </head>
 <body>
 
-  <h1>Swaroop Surya</h1>
-  <p>This page always shows my latest resume.</p>
+    <script>
+  window.resumeData = __RESUME_DATA__;
+</script>
 
-  <p>
-    <a href="resume.pdf" download>Download Resume (PDF)</a>
+<div class="resume">
+
+  <!-- HEADER -->
+  <h1 class="name" id="name"></h1>
+  <p class="role" id="role"></p>
+
+  <p class="contact">
+    <span id="phone"></span> |
+    <span id="email"></span> |
+    <span id="link"></span>
   </p>
+
+  <hr />
+
+  <!-- ABOUT -->
+  <section id="about-section">
+    <h2>ABOUT ME</h2>
+    <p id="about"></p>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education-section">
+    <h2>ACADEMIC QUALIFICATIONS</h2>
+    <div id="education"></div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills-section">
+    <h2>TECHNICAL SKILLS</h2>
+    <ul id="skills"></ul>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects-section">
+    <h2>PROJECT WORK</h2>
+    <div id="projects"></div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section id="certifications-section">
+    <h2>CERTIFICATIONS</h2>
+    <ul id="certifications"></ul>
+  </section>
+
+  <!-- ACHIEVEMENTS -->
+  <section id="achievements-section">
+    <h2>ACHIEVEMENTS</h2>
+    <ul id="achievements"></ul>
+  </section>
+
+  <!-- ACTIVITIES -->
+  <section id="activities-section">
+    <h2>ACTIVE PARTICIPATION</h2>
+    <ul id="activities"></ul>
+  </section>
+
+  <!-- PERSONAL SKILLS -->
+  <section id="personal-skills-section">
+    <h2>PERSONAL SKILLS</h2>
+    <ul id="personalSkills"></ul>
+  </section>
+
+  <!-- DECLARATION -->
+  <section id="declaration-section">
+    <h2>DECLARATION</h2>
+    <p id="declaration"></p>
+  </section>
+
+</div>
+
+<script>
+  const d = window.resumeData;
+
+  // HEADER
+  name.textContent = d.basics.name;
+  role.textContent = d.basics.role || "";
+  phone.textContent = d.basics.phone || "";
+  email.textContent = d.basics.email || "";
+  link.textContent = d.basics.link || "";
+
+  // ABOUT
+  toggle("about-section", d.about);
+  about.textContent = d.about || "";
+
+  // EDUCATION
+  toggle("education-section", d.education?.length);
+  d.education?.forEach(e => {
+    education.innerHTML += `
+      <p><strong>${e.degree}</strong><br>
+      ${e.college} (${e.year})</p>`;
+  });
+
+  // SKILLS
+  toggle("skills-section", d.skills?.length);
+  d.skills?.forEach(s => skills.innerHTML += `<li>${s}</li>`);
+
+  // PROJECTS
+  toggle("projects-section", d.projects?.length);
+  d.projects?.forEach(p => {
+    projects.innerHTML += `
+      <p><strong>${p.title}</strong><br>
+      ${p.description}<br>
+      <em>${(p.tech || []).join(", ")}</em></p>`;
+  });
+
+  // GENERIC LIST SECTIONS
+  list("certifications", "certifications-section");
+  list("achievements", "achievements-section");
+  list("activities", "activities-section");
+  list("personalSkills", "personal-skills-section");
+
+  // DECLARATION
+  toggle("declaration-section", d.declaration);
+  declaration.textContent = d.declaration || "";
+
+  function list(key, sectionId) {
+    toggle(sectionId, d[key]?.length);
+    d[key]?.forEach(i =>
+      document.getElementById(key).innerHTML += `<li>${i}</li>`
+    );
+  }
+
+  function toggle(id, condition) {
+    if (!condition) document.getElementById(id).style.display = "none";
+  }
+</script>
 
 </body>
 </html>
